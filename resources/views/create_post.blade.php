@@ -2,7 +2,7 @@
 @section('title', 'Login')
 @section('content')
 @auth
-<form class="ms-auto me-auto mt-auto" style="width: 500px" action="/create-article" method="POST">
+<form class="ms-auto me-auto mt-auto" style="width: 500px" action="/create-article" enctype="multipart/form-data" method="POST">
     @csrf
     <div class="mb-3">
     <label for="exampleName1" class="form-label">News Tite</label>

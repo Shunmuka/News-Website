@@ -39,11 +39,13 @@ class UserController extends Controller
             'login_password' => 'required'
         ]);
 
-        if (!auth()->attempt(['email'=> $incomingFields['login_email'], 'password' => $incomingFields['login_password']])){
-            return redirect('/');
+        if (auth()->attempt(['email'=> $incomingFields['login_email'], 'password' => $incomingFields['login_password']])){
+            $request->session()->regenerate();
+            auth()->login($user);
+            return redirect ('/createPost');
         }
-
-        $request->session()->regenerate();
-        return redirect ('/createPost');
+        else {
+            return redirect ('/');
+        }
     }
 }
