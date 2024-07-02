@@ -28,6 +28,7 @@ Route::post('/logout', [UserController::class, 'logout']);
 Route::get('/createPost', [PostController::class, 'showCreatePage']);
 Route::post('/create-article', [PostController::class, 'createArticle']);
 Route::get('/newsListings', [PostController::class, 'showNewsListings']);
-Route::get('/edit-post/{artilcle}', [PostController::class, 'showEditScreen']);
+Route::get('/edit-post/{article}', [PostController::class, 'showEditScreen']);
 Route::put('/edit-post/{article}', [PostController::class, 'updatePost']);
 Route::delete('/delete-post/{article}', [PostController::class, 'deletePost']);
+Route::get('/view-post/{article}', [PostController::class, 'showArticle']);

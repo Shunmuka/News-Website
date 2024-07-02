@@ -52,10 +52,10 @@ class PostController extends Controller
     }
 
     public function showEditScreen(Article $article) {
-        if (auth()->user()->id !== $article['user_id']) {
-            return redirect('/newsListings');
-        }
-
-        return view('edit-post', ['post' => $article]);
+        return view('edit-post', ['article' => $article]);
+    }
+    
+    public function showArticle(Article $article) {
+        return view('view-post', ['article' => $article]);
     }
 }

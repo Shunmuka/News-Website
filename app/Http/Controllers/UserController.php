@@ -41,7 +41,6 @@ class UserController extends Controller
 
         if (auth()->attempt(['email'=> $incomingFields['login_email'], 'password' => $incomingFields['login_password']])){
             $request->session()->regenerate();
-            auth()->login($user);
             return redirect ('/createPost');
         }
         else {

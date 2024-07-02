@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'Login')
+@section('title', 'Create Post')
 @section('content')
 @auth
 <form class="ms-auto me-auto mt-auto" style="width: 500px" action="/create-article" enctype="multipart/form-data" method="POST">
@@ -17,11 +17,6 @@
         <input type="file" class="form-control" aria-describedby="addressHelp" name="news_image" accept="image/*">
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-
-    <form action="/logout" method="POST" class="mt-auto mb-3">
-        @csrf
-        <button type="submit" class="btn btn-primary d-block mx-auto">Logout</button>
     </form>
 </div>
 @endauth

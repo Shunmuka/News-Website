@@ -1,17 +1,22 @@
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
+@extends('layout')
+
+@section('title', 'Edit Post')
+
+@section('content')
+<div class="container">
   <h1>Edit Post</h1>
   <form action="/edit-post/{{$article->id}}" method="POST">
     @csrf
     @method('PUT')
-    <input type="text" name="title" value="{{$article->title}}">
-    <textarea name="body">{{$article->body}}</textarea>
-    <button>Save Changes</button>
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input type="text" name="title" class="form-control" id="title" value="{{ $article->title }}">
+    </div>
+    <div class="mb-3">
+      <label for="body" class="form-label">Body</label>
+      <textarea name="body" class="form-control" id="body">{{ $article->body }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
   </form>
-</body>
-</html>
+</div>
+@endsection
