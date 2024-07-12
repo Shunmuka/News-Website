@@ -20,6 +20,7 @@ class CreateArticlesTable extends Migration
             $table->longText('body');
             $table->string('image');
             $table->foreignId('user_id')->constrained();
+            $table->enum('is_deleted', ['Y', 'N'])->default('N');
         });
     }
 

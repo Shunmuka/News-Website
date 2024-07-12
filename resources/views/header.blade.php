@@ -13,10 +13,6 @@
         <li class="nav-item">
           <a class="nav-link" href="/createPost">Create Post</a>
         </li>
-        <form action="/logout" method="POST" class="d-flex ms-auto">
-        @csrf
-        <button type="submit" class="btn btn-primary" >Logout</button>
-      </form>
         @else
         <li class="nav-item">
           <a class="nav-link" href="/registerPage">Register</a>
@@ -26,6 +22,12 @@
         </li>
         @endauth
       </ul>
+      @auth
+      <form action="/logout" method="POST" class="d-flex ms-auto">
+        @csrf
+        <button type="submit" class="btn btn-primary">Logout</button>
+      </form>
+      @endauth
     </div>
   </div>
 </nav>

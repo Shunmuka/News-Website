@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Response;
 
 class PostController extends Controller
@@ -21,36 +22,33 @@ class PostController extends Controller
         return redirect('/newsListings');
     }
 
-    public function showNewsListings () {
-        $articles = Article::all();
-        return view('news_listings', ['articles'=> $articles]);
+    public function showNewsListings() {
+        $articles = Article::where('is_deleted', 'N')->paginate(5);
+        return view('news_listings', compact('articles'));
     }
+    
 
-    public function createArticle (Request $request) {
-        $request->validate([
+    public function createArticle(Request $request) {
+        $data = $request->validate([
             'news_title' => 'required',
             'news_body' => 'required', 
-            'news_image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max: 2048']
+            'news_image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048']
         ]);
-
-        if($request->hasFile('news_image')) {
-            $imageName = time().'.'.$request->news_image->extension();
-            $request->news_image->storeAs('images', $imageName, 'public');
-
-            $article = [
-                'title' =>$request->news_title,
-                'body' => $request->news_body,
-                'image' => $imageName,
-                'user_id' => Auth::id()
-            ];
-
-            Article::create($article);
-        }
-
+    
+        $imagePath = $request->file('news_image')->store('images', 'public');
+    
+        $image = Image::make(public_path("storage/{$imagePath}"))->fit(1200, 1200);
+        $image->save();
+    
+        auth()->user()->posts()->create([
+            'title' => $data['news_title'],
+            'body' => $data['news_body'],
+            'image' => $imagePath
+        ]);
+    
         return redirect('/createPost')->with('success', 'Article created successfully!');
-
     }
-
+    
     public function showEditScreen(Article $article) {
         return view('edit-post', ['article' => $article]);
     }
