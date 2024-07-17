@@ -14,16 +14,56 @@ class PostController extends Controller
         return view('create_post');
     }
 
-    public function deletePost(Article $article){
-        if (auth()->user()->id === $article['user_id']) {
-           $article->delete();
+    public function deletePost(Article $article)
+    {
+        if (auth()->user()->id === $article->user_id) {
+            $article->update(['is_deleted' => 'Y']);
         }
 
-        return redirect('/newsListings');
+        return redirect('/newsListings')->with('success', 'Post deleted successfully!');
     }
 
-    public function showNewsListings() {
-        $articles = Article::where('is_deleted', 'N')->paginate(5);
+
+
+    public function updatePost(Article $article, Request $request)
+    {
+        $incomingFields = $request->validate([
+            'title' => 'required',
+            'body' => 'required',
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048']
+        ]);
+    
+        if (auth()->user()->id !== $article->user_id) {
+            return redirect('/newsListings')->withErrors(['msg' => 'Unauthorized action.']);
+        }
+    
+        if ($request->hasFile('image')) {
+            if ($article->image) {
+                \Storage::delete('public/' . $article->image);
+            }
+    
+            $imagePath = $request->file('image')->store('images', 'public');
+            $image = Image::make(public_path("storage/{$imagePath}"))->fit(1200, 1200);
+            $image->save();
+    
+            $incomingFields['image'] = $imagePath;
+        }
+    
+        $article->update([
+            'title' => $incomingFields['title'],
+            'body' => $incomingFields['body'],
+            'image' => $incomingFields['image'] ?? $article->image,
+        ]);
+    
+        return redirect()->back()->with('success', 'Post updated successfully!');
+    }
+    
+    
+    
+
+    public function showNewsListings()
+    {
+        $articles = Article::where('is_deleted', 'N')->orderBy('created_at', 'desc')->paginate(5);
         return view('news_listings', compact('articles'));
     }
     
@@ -46,8 +86,9 @@ class PostController extends Controller
             'image' => $imagePath
         ]);
     
-        return redirect('/createPost')->with('success', 'Article created successfully!');
+        return redirect('/createPost')->with('success', 'Post created successfully!');
     }
+    
     
     public function showEditScreen(Article $article) {
         return view('edit-post', ['article' => $article]);

@@ -5,13 +5,20 @@
 @section('content')
 <div class="container my-5">
     <h1 class="mb-4">News Listings</h1>
+
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+
     <div class="row">
         @foreach($articles as $article)
         <div class="col-12 mb-4">
             <div class="card h-100 shadow-sm">
                 <div class="row g-0">
                     <div class="col-md-4">
-                        <img src="/storage/{{ $article->image }}" class="img-fluid rounded-start" alt="Article Image">
+                        <img src="/storage/{{ $article->image }}" class="img-fluid rounded-start" alt="Article Image" style="height: 200px; width: 300px; object-fit: cover;">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body d-flex flex-column justify-content-between">
@@ -38,11 +45,10 @@
         @endforeach
     </div>
     <div class="row">
-    <div class="col-12 d-flex justify-content-center">
-        {{ $articles->onEachSide(1)->links('pagination::bootstrap-4') }}
+        <div class="col-12 d-flex justify-content-center">
+            {{ $articles->onEachSide(1)->links('pagination::bootstrap-4') }}
+        </div>
     </div>
-</div>
-
 </div>
 @endsection
 
