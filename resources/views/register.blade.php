@@ -41,9 +41,9 @@
 </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jqueryvalidation@1.19.5/dist/jquery.validate.js"></script>
 <script>
     $(document).ready(function () {
         $('#registerForm').validate({
@@ -109,4 +109,4 @@
         });
     });
 </script>
-@endsection
+@endpush

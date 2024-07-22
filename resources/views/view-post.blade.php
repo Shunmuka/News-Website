@@ -29,7 +29,7 @@
     .card-title {
         font-size: 2rem;
         font-weight: bold;
-    }
+  }
 
     .card-subtitle {
         font-size: 1.25rem;

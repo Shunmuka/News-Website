@@ -1,5 +1,7 @@
 @extends('layout')
+
 @section('title', 'Create Post')
+
 @section('content')
 @auth
 <div class="container mt-5">
@@ -48,7 +50,7 @@
 @endauth
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
     (function () {
         'use strict'
@@ -65,4 +67,4 @@
             })
     })()
 </script>
-@endsection
+@endpush
