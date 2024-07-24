@@ -31,7 +31,7 @@
 
 @push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jqueryvalidation@1.19.5/dist/jquery.validate.js"></script>
+<script src="hhttps://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
 <script>
     $(document).ready(function () {
         $('#loginForm').validate({
