@@ -15,10 +15,15 @@ class Article extends Model
         'body',
         'image',
         'user_id',
-        'is_deleted'
+        'is_deleted',
+        'category_id'
     ];
 
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function categories() {
+        return $this-> hasMany(Category::class, 'category_id');
     }
 }

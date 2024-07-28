@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,3 +33,6 @@ Route::get('/edit-post/{article}', [PostController::class, 'showEditScreen']);
 Route::put('/edit-post/{article}', [PostController::class, 'updatePost']);
 Route::delete('/delete-post/{article}', [PostController::class, 'deletePost']);
 Route::get('/view-post/{article}', [PostController::class, 'showArticle']);
+
+Route::get('manageCategories', [CategoryController::class, 'showManageCategories']);
+Route::post('categories/store', [CategoryController::class, 'store'])->name('categories.store');
