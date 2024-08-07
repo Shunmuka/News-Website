@@ -34,5 +34,6 @@ Route::put('/edit-post/{article}', [PostController::class, 'updatePost']);
 Route::delete('/delete-post/{article}', [PostController::class, 'deletePost']);
 Route::get('/view-post/{article}', [PostController::class, 'showArticle']);
 
-Route::get('manageCategories', [CategoryController::class, 'showManageCategories']);
+Route::get('/categories/index', [CategoryController::class, 'index'])->name('categories.index');
+Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
 Route::post('categories/store', [CategoryController::class, 'store'])->name('categories.store');

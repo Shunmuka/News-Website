@@ -10,7 +10,7 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $unguarded = [];
+    protected $fillable = ['category_name'];
 
     public function category() {
         return $this->belongsTo(Article::class, 'category_id');

@@ -14,7 +14,7 @@
           <a class="nav-link" href="/createPost">Create Post</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/manageCategories">Manage Categories</a>
+          <a class="nav-link" href="/categories/create">Manage Categories</a>
         </li>
         @else
         <li class="nav-item">

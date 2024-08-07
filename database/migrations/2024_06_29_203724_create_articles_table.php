@@ -21,7 +21,7 @@ public function up()
         $table->string('image');
         $table->foreignId('user_id')->constrained();
         $table->enum('is_deleted', ['Y', 'N'])->default('N');
-        $table->foreignId('category_id')->constrained();
+        $table->unsignedBigInteger('category_id');
     });
 }
 
