@@ -25,6 +25,7 @@
                             <div>
                                 <h5 class="card-title">{{ $article->title }} by {{ $article->user->name }}</h5>
                                 <p class="card-text">{{ substr($article->body, 0, 50) . '...' }}</p>
+                                <p class="card-text"><small class="text-muted">Category: {{ $article->category->category_name }}</small></p>
                             </div>
                             @if (auth()->check() && auth()->user()->id === $article->user_id)
                                 <div class="d-flex justify-content-between mt-3">

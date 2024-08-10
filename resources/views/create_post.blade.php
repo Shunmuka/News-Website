@@ -38,6 +38,18 @@
             </div>
         </div>
         <div class="mb-3">
+            <label for="newsCategory" class="form-label">Category</label>
+            <select class="form-select @error('category_id') is-invalid @enderror" id="newsCategory" name="category_id" required>
+                <option value="">Select Category</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                @endforeach
+            </select>
+            <div class="invalid-feedback">
+                Please select a category.
+            </div>
+        </div>
+        <div class="mb-3">
             <label for="newsImage" class="form-label">News Image</label>
             <input type="file" class="form-control @error('news_image') is-invalid @enderror" id="newsImage" name="news_image" accept="image/*" required>
             <div class="invalid-feedback">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
@@ -10,8 +11,9 @@ use Illuminate\Support\Facades\Response;
 
 class PostController extends Controller
 {
-    public function showCreatePage () {
-        return view('create_post');
+    public function showCreatePage() {
+        $categories = Category::all();  
+        return view('create_post', compact('categories'));  
     }
 
     public function deletePost(Article $article)
@@ -61,18 +63,19 @@ class PostController extends Controller
     
     
 
-    public function showNewsListings()
-    {
-        $articles = Article::where('is_deleted', 'N')->orderBy('created_at', 'desc')->paginate(5);
+    public function showNewsListings() {
+        $articles = Article::where('is_deleted', 'N')->with('category')->orderBy('created_at', 'desc')->paginate(5);
         return view('news_listings', compact('articles'));
     }
+
     
 
     public function createArticle(Request $request) {
         $data = $request->validate([
             'news_title' => 'required',
             'news_body' => 'required', 
-            'news_image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048']
+            'news_image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            'category_id' => 'required|exists:categories,id',
         ]);
     
         $imagePath = $request->file('news_image')->store('images', 'public');
@@ -83,11 +86,13 @@ class PostController extends Controller
         auth()->user()->posts()->create([
             'title' => $data['news_title'],
             'body' => $data['news_body'],
-            'image' => $imagePath
+            'image' => $imagePath,
+            'category_id' => $data['category_id'],
         ]);
     
         return redirect('/createPost')->with('success', 'Post created successfully!');
     }
+    
     
     
     public function showEditScreen(Article $article) {
@@ -97,4 +102,6 @@ class PostController extends Controller
     public function showArticle(Article $article) {
         return view('view-post', ['article' => $article]);
     }
+    
+    
 }
