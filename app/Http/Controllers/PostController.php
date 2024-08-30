@@ -99,9 +99,45 @@ class PostController extends Controller
         return view('edit-post', ['article' => $article]);
     }
     
+
     public function showArticle(Article $article) {
         return view('view-post', ['article' => $article]);
     }
+
     
+    
+
+
+
+
+public function landingIndex() {
+    $articles = Article::where('is_deleted', 'N')->with('category')->orderBy('created_at', 'desc')->paginate(10);
+
+    $popularArticles = Article::where('is_deleted', 'N')->orderBy('views_count', 'desc')->limit(5)->get();
+
+    $categories = Category::whereHas('articles', function ($query) {
+        $query->where('is_deleted', 'N');
+    })->get();
+
+    return view('news_landing', compact('articles', 'popularArticles', 'categories'));
+}
+
+
+
+public function postsByCategory($id) {
+    $articles = Article::where('category_id', $id)
+        ->where('is_deleted', 'N')
+        ->with('category')
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
+
+    return response()->json([
+        'html' => view('partials.articles', ['articles' => $articles])->render(),
+        'pagination' => $articles->links('pagination::bootstrap-4')->render(),
+    ]);
+}
+
+
+
     
 }

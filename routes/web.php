@@ -39,3 +39,8 @@ Route::get('/categories/create', [CategoryController::class, 'create'])->name('c
 Route::post('categories/store', [CategoryController::class, 'store'])->name('categories.store');
 Route::get('categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
 Route::delete('categories/destroy/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+
+Route::get('/landing/index', [PostController::class, 'landingIndex'])->name('landing.index');
+Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
+Route::get('/posts-by-category/{id}', [PostController::class, 'postsByCategory']);
+Route::get('/view-post/{id}', [PostController::class, 'showArticle'])->name('view-post');
