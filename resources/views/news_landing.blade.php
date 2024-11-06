@@ -41,9 +41,11 @@
                 <h4>Popular Articles</h4>
                 <ul class="list-group">
                     @forelse($popularArticles as $article)
-                        <li class="list-group-item">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
                             <a href="{{ route('view-post', $article->id) }}">{{ $article->title }}</a>
-                            <span class="badge bg-info float-end">{{ $article->views_count }} views</span>
+                            <span class="badge bg-info popular-article-{{ $article->id }}-views">
+                               {{ $article->views_count }} views
+                            </span>
                         </li>
                     @empty
                         <li class="list-group-item">No popular articles available.</li>
@@ -59,30 +61,46 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('#category-table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('categories.index') }}",
-        columns: [
-            { data: 'id' },
-            { data: 'category_name' },
-            { data: 'action', orderable: false, searchable: false }
-        ]
-    });
-
+    // Handle category clicks
     $(document).on('click', '.category-link', function(e) {
         e.preventDefault();
         var categoryId = $(this).data('id');
         
+        // Add active class to selected category
+        $('.category-link').removeClass('active');
+        $(this).addClass('active');
+        
         $.ajax({
-            url: "{{ url('/posts-by-category') }}/" + categoryId,
+            url: `/posts-by-category/${categoryId}`,
             method: 'GET',
             success: function(response) {
                 $('#articles-container').html(response.html);
-                $('.pagination').html(response.pagination);
+            },
+            error: function(error) {
+                console.error('Error fetching category posts:', error);
             }
         });
     });
+
+    // Handle pagination clicks for category filtered results
+    $(document).on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        var page = $(this).attr('href').split('page=')[1];
+        var categoryId = $('.category-link.active').data('id');
+        
+        if (categoryId) {
+            loadPosts(page, categoryId);
+        }
+    });
+
+    function loadPosts(page, categoryId) {
+        $.ajax({
+            url: `/posts-by-category/${categoryId}?page=${page}`,
+            success: function(response) {
+                $('#articles-container').html(response.html);
+            }
+        });
+    }
 });
 </script>
 @endpush

@@ -44,3 +44,4 @@ Route::get('/landing/index', [PostController::class, 'landingIndex'])->name('lan
 Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
 Route::get('/posts-by-category/{id}', [PostController::class, 'postsByCategory']);
 Route::get('/view-post/{id}', [PostController::class, 'showArticle'])->name('view-post');
+Route::post('/increment-views/{article}', [PostController::class, 'incrementViews'])->name('increment.views');

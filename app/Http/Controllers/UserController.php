@@ -35,16 +35,18 @@ class UserController extends Controller
 
     public function login (Request $request) {
         $incomingFields = $request->validate([
-            'login_email' => 'required', 
-            'login_password' => 'required'
+            'email' => 'required|email', 
+            'password' => 'required'
         ]);
-
-        if (auth()->attempt(['email'=> $incomingFields['login_email'], 'password' => $incomingFields['login_password']])){
+    
+        if (auth()->attempt(['email' => $incomingFields['email'], 'password' => $incomingFields['password']])) {
             $request->session()->regenerate();
-            return redirect ('/createPost');
-        }
-        else {
-            return redirect ('/');
+            return redirect('/createPost');
+        } else {
+            return redirect('/')->withErrors([
+                'login_error' => 'Invalid email or password.',
+            ]);
         }
     }
+    
 }

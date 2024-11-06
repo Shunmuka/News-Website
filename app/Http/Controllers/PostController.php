@@ -100,44 +100,62 @@ class PostController extends Controller
     }
     
 
-    public function showArticle(Article $article) {
-        return view('view-post', ['article' => $article]);
+    public function showArticle($id)
+{
+    $article = Article::findOrFail($id);
+    $article->increment('views_count');
+    return view('view-post', compact('article'));
+}
+    
+    public function postsByCategory($id)
+    {
+        $articles = Article::where('category_id', $id)
+            ->with(['user', 'category'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        $html = view('partials.articles', compact('articles'))->render();
+        $pagination = view('pagination::bootstrap-4', [
+            'paginator' => $articles
+        ])->render();
+
+        return response()->json([
+            'html' => $html,
+            'pagination' => $pagination
+        ]);
     }
 
-    
-    
-
-
-
-
-public function landingIndex() {
-    $articles = Article::where('is_deleted', 'N')->with('category')->orderBy('created_at', 'desc')->paginate(10);
-
-    $popularArticles = Article::where('is_deleted', 'N')->orderBy('views_count', 'desc')->limit(5)->get();
-
-    $categories = Category::whereHas('articles', function ($query) {
-        $query->where('is_deleted', 'N');
-    })->get();
-
-    return view('news_landing', compact('articles', 'popularArticles', 'categories'));
-}
-
-
-
-public function postsByCategory($id) {
-    $articles = Article::where('category_id', $id)
-        ->where('is_deleted', 'N')
-        ->with('category')
-        ->orderBy('created_at', 'desc')
-        ->paginate(10);
+public function incrementViews(Article $article)
+{
+    $article->increment('views_count');
 
     return response()->json([
-        'html' => view('partials.articles', ['articles' => $articles])->render(),
-        'pagination' => $articles->links('pagination::bootstrap-4')->render(),
+        'success' => true,
+        'new_count' => $article->views_count,
     ]);
 }
 
 
 
-    
+    public function landingIndex()
+    {
+        $articles = Article::with(['user', 'category'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        $categories = Category::all();
+        
+        $popularArticles = Article::orderBy('views_count', 'desc')
+            ->take(5)
+            ->get();
+
+        return view('news_landing', compact('articles', 'categories', 'popularArticles'));
+    }
+
+
+
 }
+
+
+
+    
